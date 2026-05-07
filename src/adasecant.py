@@ -150,7 +150,7 @@ class Adasecant(Optimizer):
                 new_gamma_num_sqr = (1 - inv_tau) * gamma_num_sqr + inv_tau * obs_num
                 new_gamma_den_sqr = (1 - inv_tau) * gamma_den_sqr + inv_tau * obs_den
 
-                gamma = torch.sqrt(gamma_num_sqr) / (torch.sqrt(gamma_den_sqr) + eps)
+                gamma = torch.sqrt(new_gamma_num_sqr) / (torch.sqrt(new_gamma_den_sqr) + eps)
                 if gamma_clip is not None:
                     gamma = torch.clamp(gamma, max=gamma_clip)
 
@@ -170,7 +170,7 @@ class Adasecant(Optimizer):
                 rms_dx = torch.sqrt(msdx_eff + eps)
                 rms_curv = torch.sqrt(new_mean_curvature_sqr + eps)
 
-                delta = -(rms_dx / rms_curv - cov_num / (new_mean_curvature_sqr + eps))
+                delta = -(rms_dx / rms_curv - cov_num / (new_mean_curvature_sqr + eps)) * g_tilde
 
                 # delta moving averages
                 new_mean_square_dx = (1 - inv_tau) * mean_square_dx + inv_tau * (
