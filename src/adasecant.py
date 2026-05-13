@@ -11,7 +11,7 @@ class Adasecant(Optimizer):
     decay : float
         Fixed rho for the gradient statistics.
     gamma_clip : float
-        Upper bound on the variance reduction coefficient gamma. authors suggest 1.8 
+        Upper bound on the variance reduction coefficient gamma. authors suggest 1.8
     skip_nan_inf : bool
         If True, replace NaN/Inf entries in the gradient with 0.
     use_corrected_grad : bool
@@ -68,9 +68,10 @@ class Adasecant(Optimizer):
         state["gamma_num_sqr"] = torch.full_like(p.data, eps)
         state["gamma_den_sqr"] = torch.full_like(p.data, eps)
 
-        # Covariance E[Delta * alpha] — adaptive decay 1/tau
+        # covariance - moving avg of delta * alpha, adaptive decay 1/tau
         state["cov_num"] = torch.full_like(p.data, eps)
 
+        # tau
         state["tau"] = torch.full_like(p.data, (1.0 + eps) * tau)
 
         # old gradients
@@ -130,7 +131,8 @@ class Adasecant(Optimizer):
                 tau = state["tau"]
                 g_old_plain = state["g_old_plain"]
                 g_old = state["g_old"]
-
+                
+                # for step 0 bar{delta} = g and bar{delta}^2 = g^2
                 if step == 0:
                     msdx_eff = g * g
                     mdx_eff = g.clone()
@@ -150,17 +152,20 @@ class Adasecant(Optimizer):
                 new_gamma_num_sqr = (1 - inv_tau) * gamma_num_sqr + inv_tau * obs_num
                 new_gamma_den_sqr = (1 - inv_tau) * gamma_den_sqr + inv_tau * obs_den
 
-                gamma = torch.sqrt(new_gamma_num_sqr) / (torch.sqrt(new_gamma_den_sqr) + eps)
+                gamma = torch.sqrt(new_gamma_num_sqr) / (
+                    torch.sqrt(new_gamma_den_sqr) + eps
+                )
                 if gamma_clip is not None:
                     gamma = torch.clamp(gamma, max=gamma_clip)
 
-                # gamma~
+                # g~
                 g_tilde = (g + gamma * new_mean_grad) / (1 + gamma)
 
                 # alpha
                 alpha = g - g_old_plain
                 alpha_sqr = alpha * alpha
 
+                # alpha moving averages
                 new_mean_curvature = (1 - inv_tau) * mean_curvature + inv_tau * alpha
                 new_mean_curvature_sqr = (
                     1 - inv_tau
@@ -170,7 +175,11 @@ class Adasecant(Optimizer):
                 rms_dx = torch.sqrt(msdx_eff + eps)
                 rms_curv = torch.sqrt(new_mean_curvature_sqr + eps)
 
-                delta = -(rms_dx / rms_curv - cov_num / (new_mean_curvature_sqr + eps)) * g_tilde
+                # delta
+                delta = (
+                    -(rms_dx / rms_curv - cov_num / (new_mean_curvature_sqr + eps))
+                    * g_tilde
+                )
 
                 # delta moving averages
                 new_mean_square_dx = (1 - inv_tau) * mean_square_dx + inv_tau * (
@@ -182,7 +191,7 @@ class Adasecant(Optimizer):
                 ratio = (mdx_eff * mdx_eff) / (msdx_eff + eps)
                 new_tau_step = (1 - ratio) * tau + (1.0 + eps)
 
-                # outlier detection (if triggered, reset tau to 2.2)
+                # outlier detection (if triggered reset tau to 2.2)
                 var_g = torch.clamp(new_mean_square_grad - new_mean_grad**2, min=0.0)
                 var_alpha = torch.clamp(
                     new_mean_curvature_sqr - new_mean_curvature**2, min=0.0
