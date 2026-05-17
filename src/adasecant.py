@@ -47,7 +47,7 @@ class Adasecant(Optimizer):
     def _init_state(self, p, group):
         state = self.state[p]
         eps = self.damping
-        tau = 2.2
+        tau = 2.1
 
         # step counter
         state["step"] = 0
