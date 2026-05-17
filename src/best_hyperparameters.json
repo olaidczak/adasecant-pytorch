@@ -1,13 +1,13 @@
 {
     "mnist": {
-        "32": {
+        "8": {
             "SGD": {
                 "lr": 0.01,
                 "momentum": 0.9
             },
             "Adam": {
-                "lr": 0.001,
-                "eps": 1e-07
+                "lr": 0.0001,
+                "eps": 1e-08
             },
             "RMSprop": {
                 "lr": 0.001,
@@ -15,7 +15,26 @@
             },
             "Adasecant": {
                 "decay": 0.9,
-                "gamma_clip": 2.2,
+                "gamma_clip": 1.5,
+                "use_corrected_grad": true
+            }
+        },
+        "32": {
+            "SGD": {
+                "lr": 0.01,
+                "momentum": 0.9
+            },
+            "Adam": {
+                "lr": 0.001,
+                "eps": 1e-08
+            },
+            "RMSprop": {
+                "lr": 0.001,
+                "eps": 1e-08
+            },
+            "Adasecant": {
+                "decay": 0.9,
+                "gamma_clip": 1.8,
                 "use_corrected_grad": true
             }
         },
@@ -34,7 +53,7 @@
             },
             "Adasecant": {
                 "decay": 0.9,
-                "gamma_clip": 2.2,
+                "gamma_clip": 1.5,
                 "use_corrected_grad": false
             }
         },
@@ -53,13 +72,13 @@
             },
             "Adasecant": {
                 "decay": 0.9,
-                "gamma_clip": 2.2,
+                "gamma_clip": 1.5,
                 "use_corrected_grad": true
             }
         }
     },
     "cifar10": {
-        "32": {
+        "8": {
             "SGD": {
                 "lr": 0.01,
                 "momentum": 0.9
@@ -78,14 +97,14 @@
                 "use_corrected_grad": false
             }
         },
-        "128": {
+        "32": {
             "SGD": {
-                "lr": 0.1,
+                "lr": 0.01,
                 "momentum": 0.9
             },
             "Adam": {
                 "lr": 0.001,
-                "eps": 1e-08
+                "eps": 1e-07
             },
             "RMSprop": {
                 "lr": 0.001,
@@ -93,11 +112,11 @@
             },
             "Adasecant": {
                 "decay": 0.9,
-                "gamma_clip": 2.2,
-                "use_corrected_grad": true
+                "gamma_clip": 1.5,
+                "use_corrected_grad": false
             }
         },
-        "512": {
+        "128": {
             "SGD": {
                 "lr": 0.1,
                 "momentum": 0.9
@@ -113,6 +132,25 @@
             "Adasecant": {
                 "decay": 0.9,
                 "gamma_clip": 1.5,
+                "use_corrected_grad": false
+            }
+        },
+        "512": {
+            "SGD": {
+                "lr": 0.1,
+                "momentum": 0.9
+            },
+            "Adam": {
+                "lr": 0.001,
+                "eps": 1e-08
+            },
+            "RMSprop": {
+                "lr": 0.001,
+                "eps": 1e-07
+            },
+            "Adasecant": {
+                "decay": 0.95,
+                "gamma_clip": 1.8,
                 "use_corrected_grad": true
             }
         }
