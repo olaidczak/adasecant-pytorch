@@ -1,0 +1,120 @@
+{
+    "mnist": {
+        "32": {
+            "SGD": {
+                "lr": 0.01,
+                "momentum": 0.9
+            },
+            "Adam": {
+                "lr": 0.001,
+                "eps": 1e-07
+            },
+            "RMSprop": {
+                "lr": 0.001,
+                "eps": 1e-07
+            },
+            "Adasecant": {
+                "decay": 0.9,
+                "gamma_clip": 2.2,
+                "use_corrected_grad": true
+            }
+        },
+        "128": {
+            "SGD": {
+                "lr": 0.1,
+                "momentum": 0.9
+            },
+            "Adam": {
+                "lr": 0.001,
+                "eps": 1e-07
+            },
+            "RMSprop": {
+                "lr": 0.001,
+                "eps": 1e-07
+            },
+            "Adasecant": {
+                "decay": 0.9,
+                "gamma_clip": 2.2,
+                "use_corrected_grad": false
+            }
+        },
+        "512": {
+            "SGD": {
+                "lr": 0.1,
+                "momentum": 0.9
+            },
+            "Adam": {
+                "lr": 0.001,
+                "eps": 1e-08
+            },
+            "RMSprop": {
+                "lr": 0.001,
+                "eps": 1e-07
+            },
+            "Adasecant": {
+                "decay": 0.9,
+                "gamma_clip": 2.2,
+                "use_corrected_grad": true
+            }
+        }
+    },
+    "cifar10": {
+        "32": {
+            "SGD": {
+                "lr": 0.01,
+                "momentum": 0.9
+            },
+            "Adam": {
+                "lr": 0.001,
+                "eps": 1e-08
+            },
+            "RMSprop": {
+                "lr": 0.001,
+                "eps": 1e-07
+            },
+            "Adasecant": {
+                "decay": 0.99,
+                "gamma_clip": 1.8,
+                "use_corrected_grad": false
+            }
+        },
+        "128": {
+            "SGD": {
+                "lr": 0.1,
+                "momentum": 0.9
+            },
+            "Adam": {
+                "lr": 0.001,
+                "eps": 1e-08
+            },
+            "RMSprop": {
+                "lr": 0.001,
+                "eps": 1e-08
+            },
+            "Adasecant": {
+                "decay": 0.9,
+                "gamma_clip": 2.2,
+                "use_corrected_grad": true
+            }
+        },
+        "512": {
+            "SGD": {
+                "lr": 0.1,
+                "momentum": 0.9
+            },
+            "Adam": {
+                "lr": 0.001,
+                "eps": 1e-07
+            },
+            "RMSprop": {
+                "lr": 0.001,
+                "eps": 1e-07
+            },
+            "Adasecant": {
+                "decay": 0.9,
+                "gamma_clip": 1.5,
+                "use_corrected_grad": true
+            }
+        }
+    }
+}
