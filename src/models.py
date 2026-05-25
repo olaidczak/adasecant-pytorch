@@ -166,3 +166,87 @@ class ModernLSTM(nn.Module):
         # Decode the hidden state of the last time step
         out = self.fc(out[:, -1, :])
         return out
+
+
+class PatchEmbedding(nn.Module):
+    """
+    Splits the image into patches and projects them into the embedding dimension.
+    Also adds the learnable CLS token and positional embeddings.
+    """
+    def __init__(self, in_channels, patch_size, emb_size, img_size):
+        super().__init__()
+        self.patch_size = patch_size
+        self.proj = nn.Conv2d(in_channels, emb_size, kernel_size=patch_size, stride=patch_size)
+        
+        # Calculate number of patches
+        num_patches = (img_size // patch_size) ** 2
+        
+        # Learnable CLS token and Positional Embedding
+        self.cls_token = nn.Parameter(torch.randn(1, 1, emb_size))
+        self.pos_embed = nn.Parameter(torch.randn(1, num_patches + 1, emb_size))
+
+    def forward(self, x):
+        b, _, _, _ = x.shape
+        # Flatten patches: (batch, emb_size, num_patches) -> (batch, num_patches, emb_size)
+        x = self.proj(x).flatten(2).transpose(1, 2) 
+        
+        # Expand CLS token for the batch and concatenate
+        cls_tokens = self.cls_token.expand(b, -1, -1)
+        x = torch.cat((cls_tokens, x), dim=1)
+        
+        # Add positional embedding
+        x += self.pos_embed
+        return x
+
+class VisionTransformer(nn.Module):
+    """
+    The base Vision Transformer.
+    Uses PyTorch's native TransformerEncoder for highly optimized multi-head attention.
+    """
+    def __init__(self, in_channels, img_size, patch_size, emb_size, num_layer, heads, num_classes, dropout=0.1):
+        super().__init__()
+        self.patch_embed = PatchEmbedding(in_channels, patch_size, emb_size, img_size)
+        
+        encoder_layer = nn.TransformerEncoderLayer(
+            d_model=emb_size, 
+            nhead=heads, 
+            dim_feedforward=emb_size * 4, 
+            dropout=dropout, 
+            batch_first=True
+        )
+        self.transformer = nn.TransformerEncoder(encoder_layer, num_layers=num_layer)
+        
+        self.mlp_head = nn.Sequential(
+            nn.LayerNorm(emb_size),
+            nn.Linear(emb_size, num_classes)
+        )
+
+    def forward(self, x):
+        x = self.patch_embed(x)
+        x = self.transformer(x)
+        # Extract the final state of the CLS token (index 0) for classification
+        cls_token_final = x[:, 0]
+        return self.mlp_head(cls_token_final)
+
+
+class MNIST_ViT(VisionTransformer):
+    """
+    ViT configured for MNIST. 
+    1 channel, 28x28 images. Patch size 7 perfectly divides 28 into a 4x4 grid.
+    """
+    def __init__(self):
+        super().__init__(
+            in_channels=1, img_size=28, patch_size=7, 
+            emb_size=128, num_layer=6, heads=8, num_classes=10
+        )
+
+class CIFAR_ViT(VisionTransformer):
+    """
+    ViT configured for CIFAR-10. 
+    3 channels, 32x32 images. Patch size 4 perfectly divides 32 into an 8x8 grid.
+    """
+    def __init__(self):
+        super().__init__(
+            in_channels=3, img_size=32, patch_size=4, 
+            emb_size=256, num_layer=6, heads=8, num_classes=10
+        )
