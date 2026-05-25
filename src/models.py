@@ -250,3 +250,35 @@ class CIFAR_ViT(VisionTransformer):
             in_channels=3, img_size=32, patch_size=4, 
             emb_size=256, num_layer=6, heads=8, num_classes=10
         )
+
+
+
+class DeepLinearAutoencoder(nn.Module):
+    """
+    A 5-layer network with NO non-linear activations.
+    This creates an optimization landscape composed almost entirely of saddle points.
+    """
+    def __init__(self, input_size=784, hidden_size=1000):
+        super(DeepLinearAutoencoder, self).__init__()
+        
+        # Notice the strict absence of nn.ReLU() or any other activation
+        self.encoder_decoder = nn.Sequential(
+            nn.Linear(input_size, hidden_size),
+            nn.Linear(hidden_size, hidden_size),
+            nn.Linear(hidden_size, hidden_size),
+            nn.Linear(hidden_size, hidden_size),
+            nn.Linear(hidden_size, input_size)
+        )
+        
+        # Optional but highly recommended for saddle point testing:
+        # Initialize weights with very small random numbers to start near the origin (a massive saddle point)
+        for m in self.modules():
+            if isinstance(m, nn.Linear):
+                nn.init.normal_(m.weight, mean=0.0, std=0.001)
+                nn.init.constant_(m.bias, 0)
+
+    def forward(self, x):
+        # Flatten the image
+        x = x.view(x.size(0), -1)
+        x = self.encoder_decoder(x)
+        return x
