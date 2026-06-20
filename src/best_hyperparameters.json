@@ -14,8 +14,8 @@
                 "eps": 1e-07
             },
             "Adasecant": {
-                "decay": 0.9,
-                "gamma_clip": 1.5,
+                "decay": 0.95,
+                "gamma_clip": 1.8,
                 "use_corrected_grad": true
             }
         },
@@ -33,7 +33,7 @@
                 "eps": 1e-08
             },
             "Adasecant": {
-                "decay": 0.9,
+                "decay": 0.95,
                 "gamma_clip": 1.8,
                 "use_corrected_grad": true
             }
@@ -52,9 +52,9 @@
                 "eps": 1e-07
             },
             "Adasecant": {
-                "decay": 0.9,
-                "gamma_clip": 1.5,
-                "use_corrected_grad": false
+                "decay": 0.95,
+                "gamma_clip": 1.8,
+                "use_corrected_grad": true
             }
         },
         "512": {
@@ -71,8 +71,8 @@
                 "eps": 1e-07
             },
             "Adasecant": {
-                "decay": 0.9,
-                "gamma_clip": 1.5,
+                "decay": 0.95,
+                "gamma_clip": 1.8,
                 "use_corrected_grad": true
             }
         }
@@ -92,9 +92,9 @@
                 "eps": 1e-07
             },
             "Adasecant": {
-                "decay": 0.99,
+                "decay": 0.95,
                 "gamma_clip": 1.8,
-                "use_corrected_grad": false
+                "use_corrected_grad": true
             }
         },
         "32": {
@@ -111,9 +111,9 @@
                 "eps": 1e-08
             },
             "Adasecant": {
-                "decay": 0.9,
-                "gamma_clip": 1.5,
-                "use_corrected_grad": false
+                "decay": 0.95,
+                "gamma_clip": 1.8,
+                "use_corrected_grad": true
             }
         },
         "128": {
@@ -130,9 +130,9 @@
                 "eps": 1e-07
             },
             "Adasecant": {
-                "decay": 0.9,
-                "gamma_clip": 1.5,
-                "use_corrected_grad": false
+                "decay": 0.95,
+                "gamma_clip": 1.8,
+                "use_corrected_grad": true
             }
         },
         "512": {
