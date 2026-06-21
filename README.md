@@ -1,35 +1,34 @@
 # ADASECANT Optimizer for PyTorch
 
-PyTorch implementation of the ADASECANT optimizer.
+PyTorch implementation of the ADASECANT optimizer, compatible with the standard `torch.optim.Optimizer` interface.
 
-This repository contains a custom implementation of the ADASECANT optimization algorithm compatible with the standard `torch.optim.Optimizer` interface. The implementation is based on the ADASECANT method described in:
+It can be used as a replacement for optimizers such as SGD, Adam, or RMSprop. ADASECANT is an adaptive method that tunes update magnitudes automatically using gradient statistics and stochastic curvature information, so it does not require a learning rate.
 
-- Caglar Gulcehre, Jose Sotelo, Marcin Moczulski, Yoshua Bengio, *A Robust Adaptive Stochastic Gradient Method for Deep Learning*, arXiv:1703.00788, 2017.
-- Caglar Gulcehre, Marcin Moczulski, Yoshua Bengio, *ADASECANT: Robust Adaptive Secant Method for Stochastic Gradient*, arXiv:1412.7419, 2014.
+## Usage
 
-The optimizer can be used as a drop-in replacement for common PyTorch optimizers such as SGD, Adam, or RMSprop in typical neural network training loops.
+See [demo.ipynb](/demo.ipynb).
 
-## Overview
+## Installation
 
-ADASECANT is an adaptive stochastic optimization method designed to adjust update magnitudes using gradient statistics, curvature-related estimates, and variance reduction. The method uses stochastic curvature information to automatically tune learning rates during training.
-
-This implementation keeps per-parameter running estimates of:
-
-- gradient mean,
-- squared gradient mean,
-- update step statistics,
-- curvature statistics,
-- gamma variance-reduction terms,
-- adaptive memory time scale `tau`.
-
-The optimizer is implemented in `src/adasecant.py` and can be used directly with PyTorch models.
+```bash
+pip install -r requirements.txt
+```
 
 ## Repository structure
 
 ```text
 adasecant-pytorch/
 ├── README.md
-├── testing.ipynb
+├── requirements.txt
+├── demo.ipynb              # quick usage example
 └── src/
-    ├── __init__.py
-    └── adasecant.py
+    ├── adasecant.py        # the optimizer
+    ├── models.py           # models used in experiments
+    ├── dataloaders.py      # data loading helpers
+    └── experiments.ipynb   # benchmarks and analysis
+```
+
+## References
+
+- Caglar Gulcehre, Jose Sotelo, Marcin Moczulski, Yoshua Bengio, *A Robust Adaptive Stochastic Gradient Method for Deep Learning*, arXiv:1703.00788, 2017.
+- Caglar Gulcehre, Marcin Moczulski, Yoshua Bengio, *ADASECANT: Robust Adaptive Secant Method for Stochastic Gradient*, arXiv:1412.7419, 2014.
