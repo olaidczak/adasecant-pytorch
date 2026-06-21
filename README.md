@@ -5,14 +5,24 @@ PyTorch implementation of the ADASECANT optimizer, compatible with the standard 
 It can be used as a replacement for optimizers such as SGD, Adam, or RMSprop. ADASECANT is an adaptive method that tunes update magnitudes automatically using gradient statistics and stochastic curvature information, so it does not require a learning rate.
 
 ## Usage
+1. **Create and activate a virtual environment**
 
-See [demo.ipynb](/demo.ipynb).
+    ```bash
+    python -m venv .venv
+    source .venv/bin/activate      # macOS/Linux
+    .venv\Scripts\activate         # Windows
+    ```
 
-## Installation
+2. **Install packages**
 
-```bash
-pip install -r requirements.txt
-```
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+3. **See example usage**
+    
+    See [demo.ipynb](/demo.ipynb).
+
 
 ## Repository structure
 
